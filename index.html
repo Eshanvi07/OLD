@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RNS Institute of Technology</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8f9ff;
+            --text-primary: #333;
+            --text-secondary: #666;
+            --accent: #667eea;
+            --accent2: #764ba2;
+            --success: #4ECDC4;
+            --warning: #FF6B6B;
+            --gold: #FFD700;
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #1a1a2e;
+            --bg-secondary: #16213e;
+            --text-primary: #ffffff;
+            --text-secondary: #b8b8b8;
+            --accent: #7b9fff;
+            --accent2: #a68eff;
+            --success: #48d8c8;
+            --warning: #ff8a8a;
+            --gold: #ffd700;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background-color: var(--bg-primary);
+            overflow-x: hidden;
+            transition: all 0.3s ease;
+        }
+
+        /* Header & Navigation */
+        header {
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
+            color: white;
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--gold);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--gold);
+            transform: translateY(-2px);
+        }
+
+        .theme-toggle {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            background: rgba(255,255,255,0.3);
+            transform: scale(1.1);
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background: white;
+            margin: 3px 0;
+            transition: 0.3s;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(102, 126, 234, 0.9), rgba(118, 75, 162, 0.9)), url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1.5" fill="white" opacity="0.05"/></pattern></defs><rect width="100%" height="100%" fill="url(%23grain)"/></svg>');
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            margin-top: 80px;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: var(--bg-primary);
+            margin: 5% auto;
+            padding: 2rem;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .close {
+            color: var(--text-secondary);
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: var(--warning);
+        }
+
+        /* Game Styles */
+        .game-container {
+            text-align: center;
+            padding: 2rem;
+            background: var(--bg-secondary);
+            border-radius: 20px;
+            margin: 2rem 0;
+        }
+
+        .campus-map {
+            width: 100%;
+            height: 400px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 15px;
+            position: relative;
+            margin: 2rem 0;
+            cursor: pointer;
+            overflow: hidden;
+        }
+
+        .campus-location {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background: var(--success);
+            border-radius: 50%;
+            border: 3px solid white;
+            transition: all 0.3s ease;
+            animation: pulse 2s infinite;
+        }
+
+        .campus-location:hover {
+            transform: scale(1.5);
+            box-shadow: 0 0 20px var(--success);
+        }
+
+        .campus-location.collected {
+            background: var(--gold);
+            animation: none;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        .badges {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+
+        .badge {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: 3px solid var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: var(--accent);
+            transition: all 0.3s ease;
+        }
+
+        .badge.collected {
+            border-color: var(--gold);
+            background: var(--gold);
+            color: var(--bg-primary);
+            transform: scale(1.1);
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .timeline::after {
+            content: '';
+            position: absolute;
+            width: 6px;
+            background: var(--accent);
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -3px;
+        }
+
+        .timeline-item {
+            padding: 10px 40px;
+            position: relative;
+            background: var(--bg-secondary);
+            width: 50%;
+            border-radius: 15px;
+            margin: 2rem 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .timeline-item:nth-child(odd) {
+            left: 0;
+        }
+
+        .timeline-item:nth-child(even) {
+            left: 50%;
+        }
+
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            right: -17px;
+            background: var(--accent);
+            border: 4px solid var(--bg-primary);
+            top: 20px;
+            border-radius: 50%;
+            z-index: 1;
+        }
+
+        .timeline-item:nth-child(odd)::after {
+            left: -16px;
+        }
+
+        .alumni-photo {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            float: left;
+            margin-right: 1rem;
+            background: linear-gradient(45deg, var(--accent), var(--accent2));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+        }
+
+        /* Notice Board */
+        .notice-board {
+            background: linear-gradient(135deg, #FF9A9E, #FECFEF);
+            padding: 2rem;
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .notice-board::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--warning), var(--success), var(--accent));
+            animation: slide 3s linear infinite;
+        }
+
+        @keyframes slide {
+            0% { background-position: 0% 0; }
+            100% { background-position: 300% 0; }
+        }
+
+        .notice-item {
+            background: rgba(255,255,255,0.9);
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border-radius: 10px;
+            border-left: 5px solid var(--accent);
+            animation: noticeSlide 0.5s ease;
+        }
+
+        @keyframes noticeSlide {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* IoT Dashboard */
+        .iot-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .iot-card {
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            color: white;
+            padding: 2rem;
+            border-radius: 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .iot-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            transform: rotate(45deg);
+            transition: all 0.5s;
+        }
+
+        .iot-card.occupied::before {
+            animation: shine 2s infinite;
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+
+        /* Rest of existing styles remain the same */
+        .hero-content h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero-content p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            animation: fadeInUp 1s ease 0.2s both;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(45deg, var(--warning), var(--gold));
+            color: white;
+            padding: 15px 40px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            animation: fadeInUp 1s ease 0.4s both;
+            box-shadow: 0 10px 30px rgba(255,107,107,0.4);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(255,107,107,0.6);
+        }
+
+        section {
+            padding: 100px 0;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-left: 2rem;
+            padding-right: 2rem;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 3rem;
+            margin-bottom: 3rem;
+            background: linear-gradient(45deg, var(--accent), var(--accent2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hamburger { display: flex; }
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: linear-gradient(135deg, var(--accent), var(--accent2));
+                flex-direction: column;
+                padding: 2rem;
+            }
+            .nav-links.active { display: flex; }
+            .hero-content h1 { font-size: 2.5rem; }
+            .timeline::after { left: 31px; }
+            .timeline-item { width: 100%; padding-left: 70px; padding-right: 25px; }
+            .timeline-item:nth-child(even) { left: 0 !important; }
+            .timeline-item::after { left: 15px !important; }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body data-theme="light">
+    <!-- Theme Toggle Button in Header -->
+    <header>
+        <nav>
+            <div class="logo">
+                <i class="fas fa-university"></i> RNSIT
+            </div>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#game">Campus Game</a></li>
+                <li><a href="#alumni">Alumni</a></li>
+                <li><a href="#courses">Courses</a></li>
+                <li><a href="#placements">Placements</a></li>
+                <li><a href="#iot">Smart Classrooms</a></li>
+                <li><a href="#notices">Notices</a></li>
+                <li><a href="#accreditations">Accreditations</a></li>
+            </ul>
+            <div>
+                <button class="theme-toggle" id="themeToggle" title="Toggle Dark Mode">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <div class="hamburger" id="hamburger">
+                    <span></span><span></span><span></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1>Welcome to RNSIT</h1>
+            <p>Excellence in Engineering Education Since 2001</p>
+            <a href="#about" class="cta-button">Explore Our Legacy</a>
+        </div>
+    </section>
+
+    <!-- Campus Exploration Game -->
+    <section id="game" style="background: var(--bg-secondary);">
+        <div class="container">
+            <h2 class="section-title">🏆 Campus Badge Hunt</h2>
+            <div class="game-container">
+                <h3>Explore RNSIT Campus & Collect Badges!</h3>
+                <p>Click on campus locations to collect all 6 badges</p>
+                <div class="campus-map" id="campusMap">
+                    <!-- Library -->
+                    <div class="campus-location" style="top:20%;left:15%;" data-badge="library" title="Central Library">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <!-- Labs -->
+                    <div class="campus-location" style="top:35%;right:20%;" data-badge="labs" title="Innovation Labs">
+                        <i class="fas fa-flask"></i>
+                    </div>
+                    <!-- Sports -->
+                    <div class="campus-location" style="bottom:25%;left:10%;" data-badge="sports" title="Sports Complex">
+                        <i class="fas fa-futbol"></i>
+                    </div>
+                    <!-- Canteen -->
+                    <div class="campus-location" style="bottom:15%;right:15%;" data-badge="canteen" title="Food Court">
+                        <i class="fas fa-utensils"></i>
+                    </div>
+                    <!-- Auditorium -->
+                    <div class="campus-location" style="top:60%;left:40%;" data-badge="auditorium" title="Main Auditorium">
+                        <i class="fas fa-theater-masks"></i>
+                    </div>
+                    <!-- Hostel -->
+                    <div class="campus-location" style="bottom:35%;right:25%;" data-badge="hostel" title="Hostel">
+                        <i class="fas fa-bed"></i>
+                    </div>
+                </div>
+                <div class="badges" id="badgesContainer">
+                    <div class="badge" data-badge="library">📚</div>
+                    <div class="badge" data-badge="labs">🧪</div>
+                    <div class="badge" data-badge="sports">⚽</div>
+                    <div class="badge" data-badge="canteen">🍽️</div>
+                    <div class="badge" data-badge="auditorium">🎭</div>
+                    <div class="badge" data-badge="hostel">🛏️</div>
+                </div>
+                <div id="gameScore" style="font-size: 1.5rem; margin-top: 1rem; font-weight: bold;">Badges Collected: 0/6</div>
+                <button class="cta-button" onclick="resetGame()" style="margin-top: 1rem;">Reset Game</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Alumni Timeline -->
+    <section id="alumni">
+        <h2 class="section-title">Alumni Success Stories</h2>
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="alumni-photo">AS</div>
+                <div>
+                    <h4>Arjun Sharma (2015)</h4>
+                    <p>Software Engineer at Google. "RNSIT's coding culture prepared me for FAANG interviews."</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="alumni-photo">PD</div>
+                <div>
+                    <h4>Priya Desai (2018)</h4>
+                    <p>Co-founder AgriSense. Raised $5M funding. "Startup Incubation Cell was game-changer."</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="alumni-photo">RK</div>
+                <div>
+                    <h4>Rahul Kumar (2020)</h4>
+                    <p>Data Scientist at Microsoft. "AI/ML labs gave me real-world project experience."</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="alumni-photo">SK</div>
+                <div>
+                    <h4>Sneha Kapoor (2017)</h4>
+                    <p>Product Manager at Amazon. "Leadership roles in tech fest built my career."</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="alumni-photo">VM</div>
+                <div>
+                    <h4>Vikram Mehta (2019)</h4>
+                    <p>Cybersecurity Expert at Cisco. "Ethical hacking workshops were invaluable."</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Virtual Notice Board -->
+    <section id="notices" style="background: linear-gradient(135deg, #ffeaa7 0%, #fab1a0 50%, #fd79a8 100%);">
+        <h2 class="section-title">📌 Virtual Notice Board</h2>
+        <div class="notice-board">
+            <div class="notice-item">
+                <h4>🎉 Microsoft Placement Drive</h4>
+                <p><strong>Mar 30, 2026</strong> | CSE/ISE | Register by Mar 28 | ₹25-52 LPA</p>
+            </div>
+            <div class="notice-item">
+                <h4>📚 Exam Timetable Released</h4>
+                <p><strong>Apr 10-25</strong> | Check student portal for details</p>
+            </div>
+            <div class="notice-item">
+                <h4>🚀 Luminus'26 Tech Fest</h4>
+                <p><strong>Mar 28-Apr 5</strong> | Registrations open now!</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- IoT Classroom Occupation -->
+    <section id="iot">
+        <h2 class="section-title">🏛️ Smart Classroom Occupancy</h2>
+        <p style="text-align: center; max-width: 800px; margin: 0 auto 3rem;">Real-time IoT integration showing live classroom occupancy</p>
+        <div class="iot-container">
+            <div class="iot-card occupied" data-occupied="32">
+                <i class="fas fa-users" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                <h3>Block A-101</h3>
+                <div style="font-size: 2.5rem;">32/60</div>
+                <p>53% Occupied</p>
+            </div>
+            <div class="iot-card" data-occupied="18">
+                <i class="fas fa-users" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                <h3>Block B-205</h3>
+                <div style="font-size: 2.5rem;">18/45</div>
+                <p>40% Occupied</p>
+            </div>
+            <div class="iot-card occupied" data-occupied="45">
+                <i class="fas fa-users" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                <h3>Lab C-112</h3>
+                <div style="font-size: 2.5rem;">45/50</div>
+                <p>90% Occupied</p>
+            </div>
+            <div class="iot-card" data-occupied="5">
+                <i class="fas fa-users" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                <h3> Seminar Hall</h3>
+                <div style="font-size: 2.5rem;">5/100</div>
+                <p>5% Occupied</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Accreditations with Real Images -->
+    <section id="accreditations" style="background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%); color: white;">
+        <h2 class="section-title" style="color: white;">🏅 Accreditations & Rankings</h2>
+        <div class="accreditation-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem;">
+            <div style="text-align: center; padding: 2rem; background: rgba(255,255,255,0.1); border-radius: 20px;">
+                <i class="fas fa-certificate" style="font-size: 4rem; color: var(--gold); margin-bottom: 1rem;"></i>
+                <p>AICTE Approved</p>
+            </div>
+            <div style="text-align: center; padding: 2rem; background: rgba(255,255,255,0.1); border-radius: 20px;">
+                <i class="fas fa-university" style="font-size: 4rem; color: var(--gold); margin-bottom: 1rem;"></i>
+                <p>VTU Affiliated</p>
+            </div>
+            <div style="text-align: center; padding: 2rem; background: rgba(255,255,255,0.1); border-radius: 20px;">
+                <i class="fas fa-star" style="font-size: 4rem; color: var(--gold); margin-bottom: 1rem;"></i>
+                <p>NAAC 'A' Grade</p>
+            </div>
+            <div style="text-align: center; padding: 2rem; background: rgba(255,255,255,0.1); border-radius: 20px;">
+                <i class="fas fa-chart-line" style="font-size: 4rem; color: var(--gold); margin-bottom: 1rem;"></i>
+                <p>NIRF 151-200</p>
+            </div>
+            <div style="text-align: center; padding: 2rem; background: rgba(255,255,255,0.1); border-radius: 20px;">
+                <i class="fas fa-medal" style="font-size: 4rem; color: var(--gold); margin-bottom: 1rem;"></i>
+                <p>NBA Accredited</p>
+            </div>
+            <div style="text-align: center; padding: 2rem; background: rgba(255,255,255,0.1); border-radius: 20px;">
+                <i class="fas fa-shield-alt" style="font-size: 4rem; color: var(--gold); margin-bottom: 1rem;"></i>
+                <p>ISO 9001 Certified</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Game Modal -->
+    <div id="gameModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>🎉 Badge Collected!</h2>
+            <p id="badgeMessage"></p>
+        </div>
+    </div>
+
+    <script>
+        // Theme Toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+        
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = body.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            body.setAttribute('data-theme', newTheme);
+            themeToggle.innerHTML = newTheme === 'dark' ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+            localStorage.setItem('theme', newTheme);
+        });
+
+        // Load saved theme
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        body.setAttribute('data-theme', savedTheme);
+        themeToggle.innerHTML = savedTheme === 'dark' ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+
+        // Mobile Navigation
+        const hamburger = document.getElementById('hamburger');
+        const navLinks = document.getElementById('navLinks');
+        hamburger.addEventListener('click', () => navLinks.classList.toggle('active'));
+
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
+                navLinks.classList.remove('active');
+            });
+        });
+
+        // Campus Game
+        let collectedBadges = new Set();
+        
+        document.getElementById('campusMap').addEventListener('click', (e) => {
+            const location = e.target.closest('.campus-location');
+            if (location && !collectedBadges.has(location.dataset.badge)) {
+                collectedBadges.add(location.dataset.badge);
+                location.classList.add('collected');
+                updateGameUI();
+                showBadgeModal(location.dataset.badge);
+            }
+        });
+
+        function updateGameUI() {
+            const scoreEl = document.getElementById('gameScore');
+            scoreEl.textContent = `Badges Collected: ${collectedBadges.size}/6`;
+            
+            document.querySelectorAll('.badge').forEach(badge => {
+                if (collectedBadges.has(badge.dataset.badge)) {
+                    badge.classList.add('collected');
+                }
+            });
+
+            if (collectedBadges.size === 6) {
+                setTimeout(() => alert('🎉 Congratulations! You collected all badges! 🏆'), 500);
+            }
+        }
+
+        function showBadgeModal(badge) {
+            const messages = {
+                library: '📚 Welcome to Central Library! Home of 50,000+ books.',
+                labs: '🧪 Innovation Labs unlocked! Where ideas become reality.',
+                sports: '⚽ Sports Complex badge! Fitness is intelligence.',
+                canteen: '🍽️ Food Court pass! Fuel for champion minds.',
+                auditorium: '🎭 Main Auditorium access! Stage for future leaders.',
+                hostel: '🛏️ Hostel key! Your second home at RNSIT.'
+            };
+            document.getElementById('badgeMessage').textContent = messages[badge];
+            document.getElementById('gameModal').style.display = 'block';
+        }
+
+        function resetGame() {
+            collectedBadges.clear();
+            document.querySelectorAll('.campus-location').forEach(loc => {
+                loc.classList.remove('collected');
+            });
+            document.querySelectorAll('.badge').forEach(badge => {
+                badge.classList.remove('collected');
+            });
+            document.getElementById('gameScore').textContent = 'Badges Collected: 0/6';
+        }
+
+        // Modal close
+        document.querySelector('.close').onclick = () => {
+            document.getElementById('gameModal').style.display = 'none';
+        };
+
+        window.onclick = (e) => {
+            const modal = document.getElementById('gameModal');
+            if (e.target === modal) modal.style.display = 'none';
+        };
+
+        // IoT Live Updates
+        function updateIoTCards() {
+            document.querySelectorAll('.iot-card').forEach((card, index) => {
+                const occupancy = 20 + Math.floor(Math.random() * 40);
+                const capacity = 45 + Math.floor(Math.random() * 55);
+                const percentage = Math.round((occupancy / capacity) * 100);
+                
+                card.dataset.occupied = occupancy;
+                card.innerHTML = `
+                    <i class="fas fa-users" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                    <h3>${['A-101', 'B-205', 'C-112', 'Seminar'][index]}</h3>
+                    <div style="font-size: 2.5rem;">${occupancy}/${capacity}</div>
+                    <p>${percentage}% Occupied</p>
+                `;
+                if (percentage > 70) {
+                    card.classList.add('occupied');
+                } else {
+                    card.classList.remove('occupied');
+                }
+            });
+        }
+
+        // Update IoT every 10 seconds
+        setInterval(updateIoTCards, 10000);
+        updateIoTCards(); // Initial update
+
+        // Notice board animation
+        let noticeIndex = 0;
+        const notices = document.querySelectorAll('.notice-item');
+        setInterval(() => {
+            notices.forEach((notice, i) => {
+                notice.style.opacity = i === noticeIndex ? '1' : '0.5';
+            });
+            noticeIndex = (noticeIndex + 1) % notices.length;
+        }, 3000);
+    </script>
+</body>
+</html>
